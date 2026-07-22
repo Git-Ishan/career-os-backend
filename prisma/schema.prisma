@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  isVerified   Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  companies    Company[]
+} 
+
+enum ApplicationStatus {
+  WISHLIST
+  APPLIED
+  OA_SCHEDULED
+  OA_COMPLETED
+  INTERVIEW_SCHEDULED
+  INTERVIEW_ROUND_1
+  INTERVIEW_ROUND_2
+  INTERVIEW_ROUND_3
+  HR_ROUND
+  OFFER
+  REJECTED
+  WITHDRAWN
+}
+
+model Company {
+  id                String            @id @default(cuid())
+  name              String
+  role              String
+  location          String?
+  package           String?
+  applicationLink   String?
+  applicationDate   DateTime?
+  deadline          DateTime?
+  status            ApplicationStatus @default(WISHLIST)
+  notes             String?
+  hrContact         String?
+  referral          Boolean           @default(false)
+  priority          Boolean           @default(false)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  userId            String
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@index([userId, deadline])
+}
