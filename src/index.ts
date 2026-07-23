@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import companyRoutes from "./routes/company.routes";
+import interviewRoutes from "./routes/interview.routes";
 
 dotenv.config();
 
@@ -39,6 +40,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/companies", companyRoutes);
+app.use("/api/interviews", interviewRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
